@@ -1,0 +1,31 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""book """
+type Book {
+  id: ID!
+  title: String!
+  price: Decimal!
+  imageUrl: String!
+  stock: Float!
+  enabled: Boolean!
+}
+
+"""An arbitrary-precision Decimal type"""
+scalar Decimal
+
+type Query {
+  getBookById(id: String!): Book!
+}
+
+type Mutation {
+  createBook(input: CreateBookInput!): Book!
+}
+
+input CreateBookInput {
+  title: String!
+  price: Float!
+  imageUrl: String
+  stock: Float
+}
