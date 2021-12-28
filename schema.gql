@@ -15,12 +15,20 @@ type Book {
 """An arbitrary-precision Decimal type"""
 scalar Decimal
 
+"""user"""
+type User {
+  id: ID!
+  email: String!
+  userType: String!
+}
+
 type Query {
   getBookById(id: String!): Book!
 }
 
 type Mutation {
   createBook(input: CreateBookInput!): Book!
+  makeManager(email: EmailInput!): User!
 }
 
 input CreateBookInput {
@@ -28,4 +36,8 @@ input CreateBookInput {
   price: Float!
   imageUrl: String
   stock: Float
+}
+
+input EmailInput {
+  email: String!
 }

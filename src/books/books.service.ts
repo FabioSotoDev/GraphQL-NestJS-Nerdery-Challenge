@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { User } from 'src/users/user.model';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBookInput } from './dto/create-book.input';
 import { UpdateBookDto } from './dto/update-book.dto';
@@ -14,8 +14,7 @@ export class BooksService {
   }
 
   getBookById(id: string): Promise<Book> {
-    const book = this.prisma.book.findUnique({ where: { id: id } });
-    return book;
+    return this.prisma.book.findUnique({ where: { id: id } });
   }
 
   createBook(createBookInput: CreateBookInput) {
