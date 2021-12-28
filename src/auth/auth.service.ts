@@ -5,9 +5,10 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from 'src/users/users.service';
-import { AuthCredentialInput } from './dto/auth-credential.dto';
+import { AuthCredentialInput } from './dto/auth-credential.input';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { Token } from './token.model';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(authCredentialInput: AuthCredentialInput) {
+  async signIn(authCredentialInput: AuthCredentialInput): Promise<Token> {
     const { email, password } = authCredentialInput;
     const user = await this.userService.findUser(email);
 
