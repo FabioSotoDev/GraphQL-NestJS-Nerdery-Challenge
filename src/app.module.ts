@@ -7,11 +7,12 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    PrismaModule,
-    BooksModule,
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
+      context: ({ req }) => ({ req }),
     }),
+    PrismaModule,
+    BooksModule,
     AuthModule,
     UsersModule,
   ],

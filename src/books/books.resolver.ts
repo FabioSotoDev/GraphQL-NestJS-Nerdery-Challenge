@@ -1,5 +1,12 @@
-import { NotFoundException } from '@nestjs/common';
+import {
+  NotFoundException,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
+import { UserAuthGuard } from 'src/auth/auth.guard';
+import { GetUser } from 'src/users/get-user.decorator';
+import { User } from 'src/users/user.model';
 import { BooksService } from './books.service';
 import { CreateBookInput } from './dto/create-book.input';
 import { Book } from './models/book.model';
@@ -18,14 +25,21 @@ export class BooksResolver {
   }
 
   @Mutation(() => Book)
+  @UseGuards(UserAuthGuard)
   async createBook(
     @Args('input') createBookInput: CreateBookInput,
+    @GetUser() user: User,
   ): Promise<Book> {
-    return this.booksService.createBook(createBookInput);
-    /*if (user.userType === 'MANAGER') {
+    if (user.userType === 'MANAGER') {
       return this.booksService.createBook(createBookInput);
     } else {
       throw new UnauthorizedException('You Are Not Manager');
-    }*/
+    }
+  }
+
+  @Query(() => Book)
+  @UseGuards(UserAuthGuard)
+  async test() {
+    return { body: 'asd' };
   }
 }
