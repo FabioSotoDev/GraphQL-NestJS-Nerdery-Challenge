@@ -1,8 +1,8 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { Prisma } from '@prisma/client';
 
-@ObjectType({ description: 'book ' })
+@ObjectType({ description: 'book' })
 export class Book {
   @Field(() => ID)
   id: string;
@@ -21,4 +21,10 @@ export class Book {
 
   @Field()
   enabled: boolean;
+
+  @Field(() => GraphQLISODateTime)
+  createdAt: Date;
+
+  @Field(() => GraphQLISODateTime)
+  updatedAt: Date;
 }

@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { User } from 'src/users/user.model';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBookInput } from './dto/create-book.input';
-import { UpdateBookDto } from './dto/update-book.dto';
+import { UpdateBookInput } from './dto/update-book.input';
 import { Book } from './models/book.model';
 
 @Injectable()
@@ -21,11 +21,11 @@ export class BooksService {
     return this.prisma.book.create({ data: createBookInput });
   }
 
-  updateBook(id: string, updateBookDto: UpdateBookDto, user: User) {
+  updateBook(id: string, updateBookInput: UpdateBookInput, user: User) {
     if (user.userType === 'MANAGER') {
       return this.prisma.book.update({
         where: { id },
-        data: updateBookDto,
+        data: updateBookInput,
       });
     } else {
       throw new UnauthorizedException('You Are Not Manager');

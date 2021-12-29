@@ -9,11 +9,17 @@ import { GetUser } from 'src/users/get-user.decorator';
 import { User } from 'src/users/user.model';
 import { BooksService } from './books.service';
 import { CreateBookInput } from './dto/create-book.input';
+import { UpdateBookInput } from './dto/update-book.input';
 import { Book } from './models/book.model';
 
 @Resolver(() => Book)
 export class BooksResolver {
   constructor(private readonly booksService: BooksService) {}
+
+  @Query(() => [Book])
+  getBooks() {
+    return this.booksService.getBooks();
+  }
 
   @Query(() => Book)
   async getBookById(@Args('id') id: string): Promise<Book> {
@@ -37,9 +43,13 @@ export class BooksResolver {
     }
   }
 
-  @Query(() => Book)
+  @Mutation(() => Book)
   @UseGuards(UserAuthGuard)
-  async test() {
-    return { body: 'asd' };
+  updateBook(
+    @Args('id') id: string,
+    @Args('input') updateBookInput: UpdateBookInput,
+    @GetUser() user: User,
+  ) {
+    return this.booksService.updateBook(id, updateBookInput, user);
   }
 }
