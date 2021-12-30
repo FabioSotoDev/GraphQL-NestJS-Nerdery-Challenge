@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from 'src/users/user.model';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBookInput } from './dto/create-book.input';
@@ -9,8 +9,12 @@ import { Book } from './models/book.model';
 export class BooksService {
   constructor(private readonly prisma: PrismaService) {}
 
-  getBooks() {
-    return this.prisma.book.findMany({ orderBy: { createdAt: 'desc' } });
+  getBooks(skip: number, take: number) {
+    return this.prisma.book.findMany({
+      skip: skip,
+      take: take,
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
   getBookById(id: string): Promise<Book> {
@@ -21,15 +25,11 @@ export class BooksService {
     return this.prisma.book.create({ data: createBookInput });
   }
 
-  updateBook(id: string, updateBookInput: UpdateBookInput, user: User) {
-    if (user.userType === 'MANAGER') {
-      return this.prisma.book.update({
-        where: { id },
-        data: updateBookInput,
-      });
-    } else {
-      throw new UnauthorizedException('You Are Not Manager');
-    }
+  updateBook(id: string, updateBookInput: UpdateBookInput) {
+    return this.prisma.book.update({
+      where: { id },
+      data: updateBookInput,
+    });
   }
 
   async likeBook(id: string, user: User) {

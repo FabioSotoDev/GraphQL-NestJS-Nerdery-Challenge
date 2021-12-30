@@ -35,8 +35,13 @@ type Token {
 }
 
 type Query {
-  getBooks: [Book!]!
+  getBooks(pagination: Pagination): [Book!]!
   getBookById(id: String!): Book!
+}
+
+input Pagination {
+  skip: Float = 0
+  take: Float = 10
 }
 
 type Mutation {

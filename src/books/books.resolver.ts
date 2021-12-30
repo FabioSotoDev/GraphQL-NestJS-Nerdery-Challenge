@@ -7,6 +7,7 @@ import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
 import { UserAuthGuard } from 'src/auth/auth.guard';
 import { GetUser } from 'src/users/get-user.decorator';
 import { User } from 'src/users/user.model';
+import { Pagination } from 'src/utils/prisma-pagination.dto';
 import { BooksService } from './books.service';
 import { CreateBookInput } from './dto/create-book.input';
 import { UpdateBookInput } from './dto/update-book.input';
@@ -17,8 +18,9 @@ export class BooksResolver {
   constructor(private readonly booksService: BooksService) {}
 
   @Query(() => [Book])
-  getBooks() {
-    return this.booksService.getBooks();
+  getBooks(@Args('pagination', { nullable: true }) pagination: Pagination) {
+    const { skip, take } = pagination;
+    return this.booksService.getBooks(skip, take);
   }
 
   @Query(() => Book)
@@ -50,6 +52,10 @@ export class BooksResolver {
     @Args('input') updateBookInput: UpdateBookInput,
     @GetUser() user: User,
   ) {
-    return this.booksService.updateBook(id, updateBookInput, user);
+    if (user.userType === 'MANAGER') {
+      return this.booksService.updateBook(id, updateBookInput);
+    } else {
+      throw new UnauthorizedException('You Are Not Manager');
+    }
   }
 }
