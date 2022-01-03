@@ -38,10 +38,31 @@ type Token {
 type Order {
   id: ID!
   totalPrice: Decimal!
-  paymentDay: DateTime!
+  paymentDay: DateTime
   orderStatus: String!
-  userId: Float!
-  user: User!
+  userId: String!
+  User: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""order_book"""
+type OrderBook {
+  id: ID!
+  price: Decimal!
+  quantity: Float!
+  book: Book!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""car"""
+type Car {
+  id: ID!
+  totalPrice: Decimal!
+  paymentDay: DateTime
+  orderStatus: String!
+  OrderBook: [OrderBook!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -63,6 +84,10 @@ type Mutation {
   signIn(input: AuthCredentialInput!): Token!
   signUp(input: AuthCredentialInput!): User!
   makeManager(email: EmailInput!): User!
+  car: [Car!]!
+  addBookToCar(bookId: String!): [Car!]!
+  buy: Car!
+  cancel: Car!
 }
 
 input CreateBookInput {

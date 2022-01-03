@@ -5,7 +5,16 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class OrdersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  getOrders(skip: number, take: number) {
+  async getOrders(skip: number, take: number) {
+    const temp = await this.prisma.order.findMany({
+      skip: skip,
+      take: take,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        User: true,
+      },
+    });
+    console.log(temp);
     return this.prisma.order.findMany({
       skip: skip,
       take: take,

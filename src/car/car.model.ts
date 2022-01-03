@@ -1,10 +1,10 @@
 import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { OrderStatus, Prisma } from '@prisma/client';
-import { User } from 'src/users/user.model';
+import { OrderBook } from './order-book.model';
 
-@ObjectType({ description: 'order' })
-export class Order {
+@ObjectType({ description: 'car' })
+export class Car {
   @Field(() => ID)
   id: string;
 
@@ -17,11 +17,8 @@ export class Order {
   @Field()
   orderStatus: OrderStatus;
 
-  @Field()
-  userId: string;
-
-  @Field(() => User)
-  User: User;
+  @Field(() => [OrderBook])
+  OrderBook: OrderBook[];
 
   @Field(() => GraphQLISODateTime)
   createdAt: Date;
