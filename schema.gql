@@ -1,0 +1,114 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""user"""
+type User {
+  id: ID!
+  email: String!
+  userType: String!
+}
+
+"""book"""
+type Book {
+  id: ID!
+  title: String!
+  price: Decimal!
+  imageUrl: String!
+  stock: Float!
+  enabled: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""An arbitrary-precision Decimal type"""
+scalar Decimal
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""token"""
+type Token {
+  accessToken: String!
+}
+
+"""order"""
+type Order {
+  id: ID!
+  totalPrice: Decimal!
+  paymentDay: DateTime
+  orderStatus: String!
+  userId: String!
+  User: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""order_book"""
+type OrderBook {
+  id: ID!
+  price: Decimal!
+  quantity: Float!
+  book: Book!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""car"""
+type Car {
+  id: ID!
+  totalPrice: Decimal!
+  paymentDay: DateTime
+  orderStatus: String!
+  OrderBook: [OrderBook!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Query {
+  getBooks(pagination: Pagination): [Book!]!
+  getBookById(id: String!): Book!
+  getOrders(pagination: Pagination): [Order!]!
+}
+
+input Pagination {
+  skip: Float = 0
+  take: Float = 10
+}
+
+type Mutation {
+  createBook(input: CreateBookInput!): Book!
+  updateBook(input: UpdateBookInput!, id: String!): Book!
+  signIn(input: AuthCredentialInput!): Token!
+  signUp(input: AuthCredentialInput!): User!
+  makeManager(email: EmailInput!): User!
+  car: [Car!]!
+  addBookToCar(bookId: String!): [Car!]!
+  buy: Car!
+  cancel: Car!
+}
+
+input CreateBookInput {
+  title: String!
+  price: Float!
+  imageUrl: String
+  stock: Float
+}
+
+input UpdateBookInput {
+  title: String
+  price: Float
+  imageUrl: String
+  stock: Float
+}
+
+input AuthCredentialInput {
+  email: String!
+  password: String!
+}
+
+input EmailInput {
+  email: String!
+}
