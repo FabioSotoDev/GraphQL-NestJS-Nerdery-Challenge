@@ -34,9 +34,22 @@ type Token {
   accessToken: String!
 }
 
+"""order"""
+type Order {
+  id: ID!
+  totalPrice: Decimal!
+  paymentDay: DateTime!
+  orderStatus: String!
+  userId: Float!
+  user: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Query {
   getBooks(pagination: Pagination): [Book!]!
   getBookById(id: String!): Book!
+  getOrders(pagination: Pagination): [Order!]!
 }
 
 input Pagination {
